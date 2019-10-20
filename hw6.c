@@ -59,6 +59,26 @@ float shiny   =   1;    // Shininess (value)
 int zh        =  90;    // Light azimuth
 float ylight  =   0;    // Elevation of light
 
+// Data structure for textures
+typedef struct
+{
+   char * name;
+   char * path;
+   unsigned int tex;
+} TimTex;
+
+TimTex texture[] = {
+   {"1K-alien_skin_5-diffuse",  "textures/1K-alien_skin_5-diffuse.bmp",  0},
+   {"1K-bark_8-diffuse",        "textures/1K-bark_8-diffuse.bmp",        0},
+   {"1K-metal_rusty_2-diffuse", "textures/1K-metal_rusty_2-diffuse.bmp", 0},
+   {"1K-old_gold-diffuse",      "textures/1K-old_gold-diffuse.bmp",      0},
+   {"metal_7839",               "textures/metal_7839.bmp",               0},
+   {"metal_5818",               "textures/metal_5818.bmp",               0},
+   {"metal_8123",               "textures/metal_8123.bmp",               0}
+};
+
+#define TEX_CNT (sizeof(texture)/sizeof(texture[0]))
+
 /*
  *  OpenGL (GLUT) calls this routine to display the scene
  */
@@ -194,6 +214,46 @@ void idle()
    zh = fmod(90*t,360.0);
    //  Tell GLUT it is necessary to redisplay the scene
    glutPostRedisplay();
+}
+
+/*
+ *  GLUT calls this routine when a mouse button is pressed or released
+ */
+void mouse(int key,int status,int x,int y)
+{
+   // //  On button down, set 'move' and remember location
+   // if (status==GLUT_DOWN)
+   // {
+   //    move = (key==GLUT_LEFT_BUTTON) ? 1 : -1;
+   //    X = x;
+   //    Y = y;
+   // }
+   // //  On button up, unset move
+   // else if (status==GLUT_UP)
+   //    move = 0;
+}
+
+/*
+ *  GLUT calls this routine when a mouse is moved
+ */
+void motion(int x,int y)
+{
+   // //  Do only when move is set
+   // //  WARNING:  this only works because by coincidence 1m = 1pixel
+   // if (move)
+   // {
+   //    //  Left/right movement
+   //    Ox += X-x;
+   //    //  Near/far or Up/down movement
+   //    if (move<0)
+   //       Oy -= Y-y;
+   //    else
+   //       Oz += Y-y;
+   //    //  Remember location
+   //    X = x;
+   //    Y = y;
+   //    glutPostRedisplay();
+   // }
 }
 
 /*
@@ -403,17 +463,29 @@ int main(int argc,char* argv[])
    //  Initialize GLUT
    glutInit(&argc,argv);
    
-   //  Request double buffered, true color window with Z buffering at 600x600
+   //  Request double buffered, true color window with Z buffering at 1024x1024
    glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
    glutInitWindowSize(1024,1024);
-   glutCreateWindow("Timothy Mason");
+   glutCreateWindow("Timothy Mason: hw6 - Textures");
    
+   // go fullscreen (disable & delete prior to checkin)
+   glutFullScreen();
+
    //  Set callbacks
    glutDisplayFunc(display);
    glutReshapeFunc(reshape);
    glutSpecialFunc(special);
    glutKeyboardFunc(key);
+   glutMouseFunc(mouse);
+   glutMotionFunc(motion);
    glutIdleFunc(idle);
+
+   // Load textures
+   for (int i = 0; i < TEX_CNT; i++)
+   {
+      texture[i].tex = LoadTexBMP(texture[i].path);
+   }
+   
    
    //  Pass control to GLUT so it can interact with the user
    ErrCheck("init");
