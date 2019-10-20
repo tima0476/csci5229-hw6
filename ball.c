@@ -32,9 +32,9 @@ static void Vertex(double th,double ph)
    double x = Sin(th)*Cos(ph);
    double y = Cos(th)*Cos(ph);
    double z =         Sin(ph);
-   //  For a sphere at the origin, the position
-   //  and normal vectors are the same
+
    glNormal3d(x,y,z);
+   glTexCoord2d(th/360.0, ph/180.0+0.5);
    glVertex3d(x,y,z);
 }
 
@@ -45,12 +45,18 @@ static void Vertex(double th,double ph)
  *     emission (e)
  *     shininess (s)
  *     increment (inc)
+ *     texture (tex)
  */
-void ball(double x,double y,double z,double r, int e, int s, int inc)
+void ball(double x,double y,double z,double r, int e, int s, int inc, unsigned int tex)
 {
    int th,ph;
    float yellow[] = {1.0,1.0,0.0,1.0};
    float Emission[]  = {0.0,0.0,0.01*e,1.0};
+
+   // Set texture
+   glEnable(GL_TEXTURE_2D);
+   glBindTexture(GL_TEXTURE_2D, tex);
+
    //  Save transformation
    glPushMatrix();
    //  Offset, scale and rotate

@@ -8,7 +8,8 @@
  *     emission (e)
  *	   shininess (s)
  * 	   increment (inc)
+ *     texture (tex)
  */
-void ball(double x,double y,double z,double r, int e, int s, int inc);
+void ball(double x,double y,double z,double r, int e, int s, int inc, unsigned int tex);
 
 #endif // __ball_h__

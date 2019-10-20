@@ -68,20 +68,23 @@ typedef struct
 } TimTex;
 
 TimTex texture[] = {
-   {"1K-alien_skin_5-diffuse",  "textures/1K-alien_skin_5-diffuse.bmp",  0},
-   {"1K-bark_8-diffuse",        "textures/1K-bark_8-diffuse.bmp",        0},
-   {"1K-metal_rusty_2-diffuse", "textures/1K-metal_rusty_2-diffuse.bmp", 0},
-   {"1K-old_gold-diffuse",      "textures/1K-old_gold-diffuse.bmp",      0},
-   {"metal_7839",               "textures/metal_7839.bmp",               0},
-   {"metal_5818",               "textures/metal_5818.bmp",               0},
-   {"metal_8123",               "textures/metal_8123.bmp",               0}
+   {"earth",                    "textures/earth.bmp",                      0},
+   {"Glass-0271",               "textures/Glass-0271.bmp",                 0},
+   {"1K-alien_skin_5-diffuse",  "textures/1K-alien_skin_5-diffuse.bmp",    0},
+   {"1K-bark_8-diffuse",        "textures/1K-bark_8-diffuse.bmp",          0},
+   {"1K-metal_rusty_2-diffuse", "textures/1K-metal_rusty_2-diffuse.bmp",   0},
+   {"1K-old_gold-diffuse",      "textures/1K-old_gold-diffuse.bmp",        0},
+   {"metal_7839",               "textures/metal_7839.bmp",                 0},
+   {"metal_5818",               "textures/metal_5818.bmp",                 0},
+   {"metal_8123",               "textures/metal_8123.bmp",                 0}
 };
 
+// Macro to dynamically determine the number of elements in the texture array
 #define TEX_CNT (sizeof(texture)/sizeof(texture[0]))
 
-/*
- *  OpenGL (GLUT) calls this routine to display the scene
- */
+//
+// OpenGL (GLUT) calls this routine to display the scene
+//
 void display()
 {
    const double len=2.0;  //  Length of axes
@@ -123,7 +126,7 @@ void display()
       
       //  Draw light position as a yellow ball (still no lighting here)
       glColor3f(1,1,0);
-      ball(Position[0],Position[1],Position[2] , 0.1, emission, shininess, inc);
+      ball(Position[0],Position[1],Position[2] , 0.1, emission, shininess, inc, texture[0].tex);
       
       //  OpenGL should normalize normal vectors
       glEnable(GL_NORMALIZE);
@@ -154,8 +157,9 @@ void display()
       glDisable(GL_LIGHTING);
 
    //  Draw scene
-   glColor3f(0,.25,1);
-   ball(0,0,0, 0.3, emission, shininess, inc);
+   glColor3f(1,1,1);
+   // glColor3f(0,.25,1);
+   ball(0,0,0, 0.3, emission, shininess, inc, texture[1].tex);
 
    // Draw some rockets.   (ref: http://colorizer.org/ for a good interactive color chooser)
    rocket(   1,   1,   0,  1, 1, 0,  30, 1.0/70.0, 120.0/360.0, 3, inc);    // Green, 3 fins
