@@ -26,41 +26,44 @@
 
 // The following shapes were manually traced and digitized on graph paper.
 static duopoint rocket_profile[] = {
-   {0   ,  32},
-   {1   ,  31.4},
-   {2   ,  30.6},
-   {3.1 ,  29.5},
-   {4   ,  28.4},
-   {4.9 ,  27.3},
-   {5.6 ,  26.1},
-   {6.2 ,  25},
-   {6.7 ,  24},
-   {7.1 ,  23},
-   {7.5 ,  22},
-   {7.9 ,  21},
-   {8.2 ,  20},
-   {8.5 ,  19},
-   {8.7 ,  18},
-   {8.85,  16.9},
-   {8.9 ,  16},
-   {8.9 ,  15},
-   {8.9 ,  14},
-   {8.9 ,  13},
-   {8.85,  12},
-   {8.8 ,  11},
-   {8.7 ,  10},
-   {8.5 ,  9},
-   {8.2 ,  8},
-   {7.9 ,  7},
-   {7.5 ,  5.9},
-   {7.1 ,  5},
-   {6.6 ,  4},
-   {6.1 ,  3},
-   {5.5 ,  2},
-   {4.8 ,  1},
-   {3.8 ,  0}
+   {0   ,  32   },
+   {1   ,  31.4 },
+   {2   ,  30.6 },
+   {3.1 ,  29.5 },
+   {4   ,  28.4 },
+   {4.9 ,  27.3 },
+   {5.6 ,  26.1 },
+   {6.2 ,  25   },
+   {6.7 ,  24   },
+   {7.1 ,  23   },
+   {7.5 ,  22   },
+   {7.9 ,  21   },
+   {8.2 ,  20   },
+   {8.5 ,  19   },
+   {8.7 ,  18   },
+   {8.85,  16.9 },
+   {8.9 ,  16   },
+   {8.9 ,  15   },
+   {8.9 ,  14   },
+   {8.9 ,  13   },
+   {8.85,  12   },
+   {8.8 ,  11   },
+   {8.7 ,  10   },
+   {8.5 ,  9    },
+   {8.2 ,  8    },
+   {7.9 ,  7    },
+   {7.5 ,  5.9  },
+   {7.1 ,  5    },
+   {6.6 ,  4    },
+   {6.1 ,  3    },
+   {5.5 ,  2    },
+   {4.8 ,  1    },
+   {3.8 ,  0    }
 };
 #define ROCKET_POINT_COUNT	(sizeof(rocket_profile) / sizeof(rocket_profile[0]))
+
+static char rlp_valid = 0;    // Non-zero if the rocket_lat_pct array has been computed
+static double rocket_lat_pct[ROCKET_POINT_COUNT];  // Array of latitude percentages (how far is a point between the tip and the tail)
 
 static duopoint rocket_fin[] = {
 	{6,17.1},
@@ -284,6 +287,25 @@ void draw_fins(double bx, double by, double bz, double rx, double ry, double rz,
  */
 void rocket(double bx, double by, double bz, double rx, double ry, double rz, double ph, double s, double h, int fc, double d)
 {
+   // If this is the first time called, then populate the latitudinal progression array.  This array will be used for texture 
+   // mapping so that the texture will not be distorted, even if the rocket skin control points are not evenly spaced.
+   if (!rlp_valid) {
+      rocket_lat_pct[0] = 0.0;
+      double sum = 0.0;
+      for (int i = 1; i < ROCKET_POINT_COUNT; i++)
+      {
+         double dist = sqrt( pow(rocket_profile[i].r-rocket_profile[i-1].r, 2.0) + pow(rocket_profile[i].z-rocket_profile[i-1].z, 2.0));
+         sum += dist;
+         rocket_lat_pct[i] = sum;  // Initially store accumulated distance.
+      }
+
+      // Now the total distance is known; normalize the pct traveled array
+      for (int i = 0; i < ROCKET_POINT_COUNT; i++)
+         rocket_lat_pct[i] /= sum;
+      rlp_valid = 1;
+   }
+
+   
    // Draw the main rocket cylinder
    lathe(rocket_profile, ROCKET_POINT_COUNT, bx, by, bz, rx, ry, rz, ph, s, h, d);
 
