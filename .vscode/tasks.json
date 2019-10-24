@@ -16,7 +16,7 @@
                 "panel": "shared"
             },
             "problemMatcher": {
-                "owner": "c",
+                "owner": "cpp",
                 "fileLocation": ["relative", "${workspaceFolder}"],
                 "pattern": {
                     "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
@@ -43,7 +43,7 @@
                 "clean"
             ],
             "problemMatcher": {
-                "owner": "c",
+                "owner": "cpp",
                 "fileLocation": ["relative", "${workspaceFolder}"],
                 "pattern": {
                     "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
@@ -61,8 +61,8 @@
             "command": "hw6",
             "group": "test",
             "presentation": {
-                "echo": true,
-                "reveal": "always",
+                "echo": false,
+                "reveal": "silent",
                 "focus": false,
                 "panel": "shared"
             },
