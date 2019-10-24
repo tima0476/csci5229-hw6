@@ -108,6 +108,9 @@ void display()
    //  Flat or smooth shading
    glShadeModel(smooth ? GL_SMOOTH : GL_FLAT);
 
+   // Rotate axes
+   glRotated(-90,1,0,0);
+
    //  Light switch
    if (light)
    {
