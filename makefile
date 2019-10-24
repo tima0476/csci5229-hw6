@@ -24,15 +24,14 @@ CLEAN=rm -f $(EXE) *.o *.a
 endif
 
 # Dependencies
-hw6.o: hw6.c CSCIx229.h color.h rocket.h ball.h
+hw6.o: hw6.c CSCIx229.h rocket.h ball.h
 fatal.o: fatal.c CSCIx229.h
 loadtexbmp.o: loadtexbmp.c CSCIx229.h
 print.o: print.c CSCIx229.h
 project.o: project.c CSCIx229.h
 errcheck.o: errcheck.c CSCIx229.h
 object.o: object.c CSCIx229.h
-color.o: color.c color.h
-rocket.o: rocket.c CSCIx229.h rocket.h color.h 
+rocket.o: rocket.c CSCIx229.h rocket.h 
 ball.o: ball.c CSCIx229.h ball.h
 
 #  Create archive
@@ -46,7 +45,7 @@ CSCIx229.a:fatal.o loadtexbmp.o print.o project.o errcheck.o object.o
 	g++ -c $(CFLG) $<
 
 #  Link
-hw6:hw6.o CSCIx229.a color.o rocket.o ball.o
+hw6:hw6.o CSCIx229.a rocket.o ball.o
 	gcc -O3 -o $@ $^   $(LIBS)
 
 #  Clean

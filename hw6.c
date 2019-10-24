@@ -27,7 +27,6 @@
  *  ESC/q/Q    Exit
  */
 #include "CSCIx229.h"
-#include "color.h"
 #include "rocket.h"
 #include "ball.h"
 
@@ -81,13 +80,16 @@ TimTex texture[] = {
 void display()
 {
    const double len=2.0;  //  Length of axes
+
    //  Erase the window and the depth buffer
    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+
    //  Enable Z-buffering in OpenGL
    glEnable(GL_DEPTH_TEST);
 
    //  Undo previous transformations
    glLoadIdentity();
+
    //  Perspective - set eye position
    if (mode)
    {
@@ -117,18 +119,18 @@ void display()
       //  Light position
       float Position[]  = {distance*Cos(zh),ylight,distance*Sin(zh),1.0};
       
-      //  Draw light position as a yellow ball (still no lighting here)
-      glColor3f(1,1,0);
+      //  Draw light position as a ball (still no lighting here)
+      glColor3f(1,1,1);    // Base color is white - visible color will come from the texture
       ball(Position[0],Position[1],Position[2] , 0.1, emission, shininess, inc, texture[0].tex);
       
-      //  OpenGL should normalize normal vectors
+      //  Let OpenGL do the work of normalizing surface normal vectors
       glEnable(GL_NORMALIZE);
       
       //  Enable lighting
       glEnable(GL_LIGHTING);
       
       //  Location of viewer for specular calculationsÏ
-      glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,local);
+      glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, local);
       
       // Enable two sided mode (needed for the rocket fins)
       glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, 1);
@@ -153,12 +155,12 @@ void display()
    glColor3f(1,1,1);
    ball(0,0,0, 0.3, emission, shininess, inc, texture[1].tex);
 
-   // Draw some rockets.   (ref: http://colorizer.org/ for a good interactive color chooser)
-   rocket(   1,   1,   0,  1, 1, 0,  30, 1.0/70.0, 120.0/360.0, 3, inc);    // Green, 3 fins
-   rocket(  -1,   0,   0,  1, 0, 1,  85, 1.0/60.0,  90.0/360.0, 4, inc);    // Cyan, 4 fins
-   rocket(   0, 0.5, 1.5,  0, 1, 1, 161, 1.0/80.0, 300.0/360.0, 5, inc);    // Magenta, 5 fins
-   rocket(   0,-0.5,  -1,  0, 1, 0,  35, 1.0/90.0,  45.0/360.0, 6, inc);    // Purple, 6 fins
-   rocket( 1.1, 1.1, 1.1,  0, 0, 0,   0, 1.0/80.0, 240.0/360.0, 7, inc);    // Blue, 7 fins
+   // Draw some rockets.
+   rocket(   1,   1,   0,  1, 1, 0,  30, 1.0/70.0, 3, inc);    // 3 fins
+   rocket(  -1,   0,   0,  1, 0, 1,  85, 1.0/60.0, 4, inc);    // 4 fins
+   rocket(   0, 0.5, 1.5,  0, 1, 1, 161, 1.0/80.0, 5, inc);    // 5 fins
+   rocket(   0,-0.5,  -1,  0, 1, 0,  35, 1.0/90.0, 6, inc);    // 6 fins
+   rocket( 1.1, 1.1, 1.1,  0, 0, 0,   0, 1.0/80.0, 7, inc);    // 7 fins
 
    //  Draw axes - no lighting from here on
    glDisable(GL_LIGHTING);
@@ -201,7 +203,7 @@ void display()
 }
 
 /*
- *  GLUT calls this routine when the window is resized
+ *  GLUT calls this routine when idle
  */
 void idle()
 {

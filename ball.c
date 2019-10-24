@@ -22,7 +22,6 @@
 
 #include "CSCIx229.h"
 #include "ball.h"
-#include "color.h"
 
 /*
  *  Draw vertex in polar coordinates with normal

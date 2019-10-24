@@ -22,7 +22,6 @@
 
 #include "CSCIx229.h"
 #include "rocket.h"
-#include "color.h"
 
 // The following shapes were manually traced and digitized on graph paper.
 static duopoint rocket_profile[] = {
@@ -140,14 +139,12 @@ void cylNormal(double r, double th, double z)
  *    rx,ry,rz: 3D vector for rotation of the solid.
  *    ph:  Angle to rotate the solid around (rx,ry,rz)
  *    s: the scale of the solid
- *    h: the base hue of the solid (value from 0 to 360) (ref: http://colorizer.org/ for a good interactive color chooser)
  *    d: The angular increment for each slice of the radially symmetric solid
  */
-void lathe(dpp profile, int size, double bx, double by, double bz, double rx, double ry, double rz, double ph, double s, double h, double d)
+void lathe(dpp profile, int size, double bx, double by, double bz, double rx, double ry, double rz, double ph, double s, double d)
 {
    double th;
    int i;
-   double r, g, b;      // For receiving color values from color conversion
    double nlr, nlz;     // Temporary storage for computing surface normals of the pair of vertices on the left (lower index)
    double nrr, nrz;     // Temporary storage for computing surface normals of the pair of vertices on the right (higher index)
 
@@ -160,9 +157,7 @@ void lathe(dpp profile, int size, double bx, double by, double bz, double rx, do
    glRotated(ph, rx, ry, rz);
    glScaled(s,s,s);
 
-   // Set the color of the rocket
-   HSV2RGB(h,1,1, &r, &g, &b);
-   glColor3f(r,g,b);
+   glColor3f(1.0, 1.0, 1.0);     // Everything is white.  Colors now imparted by textures
 
    // Latitude bands
    for (i=1; i<size; i++)
@@ -250,7 +245,7 @@ void draw_fins(double bx, double by, double bz, double rx, double ry, double rz,
    for (th=0; th<=360; th += dth)
    {
       glBegin(GL_QUADS);      // The fin shape is non-convex, so can't use a simple polygon
-      glColor3f(1,0,0);       // No choice; rocket fins are RED!
+      glColor3f(1.0, 1.0, 1.0);       // Everything is now white to accomodate textures
 
       // The rocket fin is a flat plane, so all vertices have the same surface normal
       cylNormal(1, th+90, 0);
@@ -281,11 +276,10 @@ void draw_fins(double bx, double by, double bz, double rx, double ry, double rz,
  *    rx,ry,rz: 3D vector for rotation of the rocket.
  *    ph:  Angle to rotate the rocket
  *    s: the scale of the rocket
- *    h: the base hue of the rocket (value from 0 to 360) (ref: http://colorizer.org/ for a good interactive color chooser)
  *    fc: how many fins the rocket gets
  *    d: The angular increment for each slice of the rocket
  */
-void rocket(double bx, double by, double bz, double rx, double ry, double rz, double ph, double s, double h, int fc, double d)
+void rocket(double bx, double by, double bz, double rx, double ry, double rz, double ph, double s, int fc, double d)
 {
    // If this is the first time called, then populate the latitudinal progression array.  This array will be used for texture 
    // mapping so that the texture will not be distorted, even if the rocket skin control points are not evenly spaced.
@@ -307,7 +301,7 @@ void rocket(double bx, double by, double bz, double rx, double ry, double rz, do
 
    
    // Draw the main rocket cylinder
-   lathe(rocket_profile, ROCKET_POINT_COUNT, bx, by, bz, rx, ry, rz, ph, s, h, d);
+   lathe(rocket_profile, ROCKET_POINT_COUNT, bx, by, bz, rx, ry, rz, ph, s, d);
 
    // Now add some fins
    draw_fins(bx, by, bz, rx, ry, rz, ph, s, fc);
