@@ -140,14 +140,18 @@ void cylNormal(double r, double th, double z)
  *    ph:  Angle to rotate the solid around (rx,ry,rz)
  *    s: the scale of the solid
  *    d: The angular increment for each slice of the radially symmetric solid
+ *    tex: The texture to apply
  */
-void lathe(dpp profile, int size, double bx, double by, double bz, double rx, double ry, double rz, double ph, double s, double d)
+void lathe(dpp profile, int size, double bx, double by, double bz, double rx, double ry, double rz, double ph, double s, double d, unsigned int tex)
 {
    double th;
    int i;
    double nlr, nlz;     // Temporary storage for computing surface normals of the pair of vertices on the left (lower index)
    double nrr, nrz;     // Temporary storage for computing surface normals of the pair of vertices on the right (higher index)
 
+   // Set texture
+   glEnable(GL_TEXTURE_2D);
+   glBindTexture(GL_TEXTURE_2D, tex);
 
    // Save transformation
    glPushMatrix();
@@ -177,15 +181,26 @@ void lathe(dpp profile, int size, double bx, double by, double bz, double rx, do
          nrz = (i+1<size ? profile[i+1].r : profile[i].r) - profile[i-1].r;      // ...from the segment to the left of the right point
 
          // if there is a point to the right of this one, then add in it's contribution to the surface normal
-
          cylNormal(profile[i-1].z - profile[i].z, th+d/2.0, profile[i].r - profile[i-1].r);
+
          //
          // Draw the quad in counter-clockwise order
          //
-         cylNormal(nlr, th, nlz);      cylVertex(profile[i-1].r, th,   profile[i-1].z);
-         cylNormal(nrr, th, nrz);      cylVertex(profile[i  ].r, th,   profile[i  ].z);
-         cylNormal(nrr, th+d, nrz);    cylVertex(profile[i  ].r, th+d, profile[i  ].z);
-         cylNormal(nlr, th+d, nlz);    cylVertex(profile[i-1].r, th+d, profile[i-1].z);
+         cylNormal(nlr, th, nlz);  
+         glTexCoord2d(th/360.0, rocket_lat_pct[i-1]);    
+         cylVertex(profile[i-1].r, th,   profile[i-1].z);
+         
+         cylNormal(nrr, th, nrz);      
+         glTexCoord2d(th/360.0, rocket_lat_pct[i]);    
+         cylVertex(profile[i  ].r, th,   profile[i  ].z);
+         
+         cylNormal(nrr, th+d, nrz);    
+         glTexCoord2d((th+d)/360.0, rocket_lat_pct[i]);    
+         cylVertex(profile[i  ].r, th+d, profile[i  ].z);
+         
+         cylNormal(nlr, th+d, nlz);    
+         glTexCoord2d((th+d)/360.0, rocket_lat_pct[i-1]);    
+         cylVertex(profile[i-1].r, th+d, profile[i-1].z);
       }
       glEnd();
    }
@@ -217,6 +232,7 @@ void lathe(dpp profile, int size, double bx, double by, double bz, double rx, do
 
    // undo transformations
    glPopMatrix();
+   glDisable(GL_TEXTURE_2D);
 }
 
 /*
@@ -227,8 +243,9 @@ void lathe(dpp profile, int size, double bx, double by, double bz, double rx, do
  *    ph:  Angle to rotate the rocket
  *    s: the scale of the rocket
  *    fc: the number of fins on the rocket
+ *    tex: The texture to apply
  */
-void draw_fins(double bx, double by, double bz, double rx, double ry, double rz, double ph, double s, int fc)
+void draw_fins(double bx, double by, double bz, double rx, double ry, double rz, double ph, double s, int fc, unsigned int tex)
 {
    int dth = 360/fc;
    int th,i;
@@ -278,8 +295,10 @@ void draw_fins(double bx, double by, double bz, double rx, double ry, double rz,
  *    s: the scale of the rocket
  *    fc: how many fins the rocket gets
  *    d: The angular increment for each slice of the rocket
+ *    tex: The texture to apply
+ *    fintex:  The texture for the fins
  */
-void rocket(double bx, double by, double bz, double rx, double ry, double rz, double ph, double s, int fc, double d)
+void rocket(double bx, double by, double bz, double rx, double ry, double rz, double ph, double s, int fc, double d, unsigned int tex, unsigned int fintex)
 {
    // If this is the first time called, then populate the latitudinal progression array.  This array will be used for texture 
    // mapping so that the texture will not be distorted, even if the rocket skin control points are not evenly spaced.
@@ -301,8 +320,8 @@ void rocket(double bx, double by, double bz, double rx, double ry, double rz, do
 
    
    // Draw the main rocket cylinder
-   lathe(rocket_profile, ROCKET_POINT_COUNT, bx, by, bz, rx, ry, rz, ph, s, d);
+   lathe(rocket_profile, ROCKET_POINT_COUNT, bx, by, bz, rx, ry, rz, ph, s, d, tex);
 
    // Now add some fins
-   draw_fins(bx, by, bz, rx, ry, rz, ph, s, fc);
+   draw_fins(bx, by, bz, rx, ry, rz, ph, s, fc, fintex);
 }
