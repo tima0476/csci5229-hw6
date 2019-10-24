@@ -50,7 +50,7 @@ static void Vertex(double th,double ph)
 void ball(double x,double y,double z,double r, int e, int s, int inc, unsigned int tex)
 {
    int th,ph;
-   float yellow[] = {1.0,1.0,0.0,1.0};
+   float white[] = {1.0,1.0,1.0,1.0};
    float Emission[]  = {0.0,0.0,0.01*e,1.0};
 
    // Set texture
@@ -62,10 +62,10 @@ void ball(double x,double y,double z,double r, int e, int s, int inc, unsigned i
    //  Offset, scale and rotate
    glTranslated(x,y,z);
    glScaled(r,r,r);
-   //  White ball
-   // glColor3f(1,1,1);
+   //  White ball so that the texture is not recolored
+   glColor3f(1,1,1);
    glMaterialf(GL_FRONT,GL_SHININESS,s);
-   glMaterialfv(GL_FRONT,GL_SPECULAR,yellow);
+   glMaterialfv(GL_FRONT,GL_SPECULAR,white);
    glMaterialfv(GL_FRONT,GL_EMISSION,Emission);
    //  Bands of latitude
    for (ph=-90;ph<90;ph+=inc)
@@ -82,4 +82,5 @@ void ball(double x,double y,double z,double r, int e, int s, int inc, unsigned i
    }
    //  Undo transformations
    glPopMatrix();
+   glDisable(GL_TEXTURE_2D);
 }
