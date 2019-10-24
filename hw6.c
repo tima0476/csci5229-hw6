@@ -435,10 +435,7 @@ int main(int argc,char* argv[])
 
    // Load textures
    for (int i = 0; i < TEX_CNT; i++)
-   {
       texture[i].tex = LoadTexBMP(texture[i].path);
-      printf("%s: %d\n", texture[i].name, texture[i].tex);
-   }
    
    
    //  Pass control to GLUT so it can interact with the user
