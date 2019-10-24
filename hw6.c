@@ -41,7 +41,7 @@ int ph=25;              //  Elevation of view angle
 int fov=55;             //  Field of view (for perspective)
 int light=1;            //  Lighting
 double asp=1;           //  Aspect ratio
-double dim=3.0;         //  Size of world
+double dim=2.5;         //  Size of world
 int inc=10;             //  Ball drawing increment (in degrees)
 
 // Light values
