@@ -33,16 +33,16 @@
 #define MIN(a,b)  ((a) < (b) ? (a) : (b))
 #define MAX(a,b)  ((a) > (b) ? (a) : (b))
 
-int axes=1;             //  Display axes
-int mode=1;             //  Projection mode
-int move=1;             //  Move light
-int th=25;              //  Azimuth of view angle
-int ph=25;              //  Elevation of view angle
-int fov=55;             //  Field of view (for perspective)
-int light=1;            //  Lighting
-double asp=1;           //  Aspect ratio
-double dim=2.5;         //  Size of world
-int inc=10;             //  Ball drawing increment (in degrees)
+int axes=1;       //  Display axes
+int mode=1;       //  Projection mode
+int move=1;       //  Move light
+int th=25;        //  Azimuth of view angle
+int ph=25;        //  Elevation of view angle
+int fov=55;       //  Field of view (for perspective)
+int light=1;      //  Lighting
+double asp=1;     //  Aspect ratio
+double dim=2.5;   //  Size of world
+int inc=10;       //  Ball drawing increment (in degrees)
 
 // Light values
 int one       =   1;    // Unit value

@@ -28,9 +28,13 @@
  */
 static void Vertex(double th,double ph)
 {
+   // Orient to place the "pole" along y
    double x = Sin(th)*Cos(ph);
-   double y = Cos(th)*Cos(ph);
-   double z =         Sin(ph);
+   double y =         Sin(ph);
+   double z = Cos(th)*Cos(ph);
+   // double x = Sin(th)*Cos(ph);
+   // double y = Cos(th)*Cos(ph);
+   // double z =         Sin(ph);
 
    glNormal3d(x,y,z);
    glTexCoord2d(th/360.0, ph/180.0+0.5);
