@@ -5,6 +5,8 @@ CSCI 5229-001B Computer Graphics - University of Colorado Boulder
 
 Expands on the Rockets + Planet with lighting scene of HW5 by adding textures
 
+Total time: 9 hours
+
 Key bindings
   l          Toggles lighting
   a/A        Decrease/increase ambient light
