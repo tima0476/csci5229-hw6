@@ -63,6 +63,8 @@ static duopoint rocket_profile[] = {
 
 static char rlp_valid = 0;    // Non-zero if the rocket_lat_pct array has been computed
 static double rocket_lat_pct[ROCKET_POINT_COUNT];  // Array of latitude percentages (how far is a point between the tip and the tail)
+static double finmin = __DBL_MAX__;
+static double finmax = - __DBL_MAX__;
 
 static duopoint rocket_fin[] = {
 	{6,17.1},
@@ -250,6 +252,10 @@ void draw_fins(double bx, double by, double bz, double rx, double ry, double rz,
    int dth = 360/fc;
    int th,i;
 
+   // Set texture
+   glEnable(GL_TEXTURE_2D);
+   glBindTexture(GL_TEXTURE_2D, tex);
+
    // Save transformation
    glPushMatrix();
 
@@ -273,10 +279,23 @@ void draw_fins(double bx, double by, double bz, double rx, double ry, double rz,
       for (i=0; i<(ROCKET_FIN_POINT_COUNT/2 - 2); i++)
       {
          // Draw each quad CCW so the double-sided lighting will work
+         glTexCoord2d((rocket_fin[i  ].r - finmin)/(finmax-finmin), 
+               (rocket_fin[i  ].z - finmin)/(finmax-finmin));
          cylVertex(rocket_fin[i  ].r, th, rocket_fin[i  ].z);
+         
+         glTexCoord2d((rocket_fin[i+1].r - finmin)/(finmax-finmin), 
+               (rocket_fin[i+1].z - finmin)/(finmax-finmin));
          cylVertex(rocket_fin[i+1].r, th, rocket_fin[i+1].z);
-         cylVertex(rocket_fin[ROCKET_FIN_POINT_COUNT-i-2].r, th, rocket_fin[ROCKET_FIN_POINT_COUNT-i-2].z);
-         cylVertex(rocket_fin[ROCKET_FIN_POINT_COUNT-i-1].r, th, rocket_fin[ROCKET_FIN_POINT_COUNT-i-1].z);
+         
+         glTexCoord2d((rocket_fin[ROCKET_FIN_POINT_COUNT-i-2].r - finmin)/(finmax-finmin), 
+               (rocket_fin[ROCKET_FIN_POINT_COUNT-i-2].z - finmin)/(finmax-finmin));
+         cylVertex(rocket_fin[ROCKET_FIN_POINT_COUNT-i-2].r, th, 
+               rocket_fin[ROCKET_FIN_POINT_COUNT-i-2].z);
+         
+         glTexCoord2d((rocket_fin[ROCKET_FIN_POINT_COUNT-i-1].r - finmin)/(finmax-finmin), 
+               (rocket_fin[ROCKET_FIN_POINT_COUNT-i-1].z - finmin)/(finmax-finmin));
+         cylVertex(rocket_fin[ROCKET_FIN_POINT_COUNT-i-1].r, th, 
+               rocket_fin[ROCKET_FIN_POINT_COUNT-i-1].z);
       }
 
       glEnd();
@@ -284,6 +303,7 @@ void draw_fins(double bx, double by, double bz, double rx, double ry, double rz,
 
    // undo transformations
    glPopMatrix();   
+   glDisable(GL_TEXTURE_2D);
 }
 
 /*
@@ -316,6 +336,16 @@ void rocket(double bx, double by, double bz, double rx, double ry, double rz, do
       for (int i = 0; i < ROCKET_POINT_COUNT; i++)
          rocket_lat_pct[i] /= sum;
       rlp_valid = 1;
+
+      // While we're here, scan the rocket fin points for the min and max values (used for mapping the texture)
+      for (int i = 0; i < ROCKET_FIN_POINT_COUNT; i++)
+      {
+         // Scan both r and z for the min and max so that the texture mapping has a square aspect ratio.
+         finmin = MIN( finmin, rocket_fin[i].r );
+         finmin = MIN( finmin, rocket_fin[i].z );
+         finmax = MAX( finmax, rocket_fin[i].r );
+         finmax = MAX( finmax, rocket_fin[i].z );
+      }
    }
 
    

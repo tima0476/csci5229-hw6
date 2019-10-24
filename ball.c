@@ -58,6 +58,7 @@ void ball(double x,double y,double z,double r, int e, int s, int inc, unsigned i
 
    //  Save transformation
    glPushMatrix();
+   
    //  Offset, scale and rotate
    glTranslated(x,y,z);
    glScaled(r,r,r);

@@ -1,6 +1,9 @@
 #ifndef __rocket_h__
 #define __rocket_h__	// Prevent double instantiation
 
+#define MIN(a,b)  ((a) < (b) ? (a) : (b))
+#define MAX(a,b)  ((a) > (b) ? (a) : (b))
+
 // Data structure containing a single point in 2d space
 typedef struct duopoint {
 	double r;
