@@ -340,7 +340,7 @@ void rocket(double bx, double by, double bz, double rx, double ry, double rz, do
       // While we're here, scan the rocket fin points for the min and max values (used for mapping the texture)
       for (int i = 0; i < ROCKET_FIN_POINT_COUNT; i++)
       {
-         // Scan both r and z for the min and max so that the texture mapping has a square aspect ratio.
+         // Find the coordinates of the smallest square which fully contains all of the points in the fin.
          finmin = MIN( finmin, rocket_fin[i].r );
          finmin = MIN( finmin, rocket_fin[i].z );
          finmax = MAX( finmax, rocket_fin[i].r );
