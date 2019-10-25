@@ -63,14 +63,15 @@ typedef struct
 } TimTex;
 
 TimTex texture[] = {
-   {"textures/sun.bmp",  0},              // 0
-   {"textures/mars.bmp", 0},              // 1
-   {"textures/Metal-2839.bmp", 0},        // 2
-   {"textures/Glass-0271.bmp", 0},        // 3
-   {"textures/Concrete-0196.bmp", 0},     // 4
-   {"textures/Concrete-0221.bmp", 0},     // 5
-   {"textures/Rubber-0472.bmp", 0},       // 6
-   {"textures/red-plastic.bmp", 0}, // 7
+   {"textures/sun.bmp",  0},                   // 0
+   {"textures/mars.bmp", 0},                   // 1
+   {"textures/Metal-2839.bmp", 0},             // 2
+   {"textures/Glass-0271.bmp", 0},             // 3
+   {"textures/Concrete-0196.bmp", 0},          // 4
+   {"textures/Concrete-0221.bmp", 0},          // 5
+   {"textures/Rubber-0472.bmp", 0},            // 6
+   {"textures/red-plastic.bmp", 0},            // 7
+   {"textures/fire-ring-free-texture.bmp", 0}, // 8
 };
 
 // Macro to dynamically determine the number of elements in the texture array
@@ -160,12 +161,27 @@ void display()
    glColor3f(1,1,1);
    ball(0,0,0, 0.3, emission, shininess, inc, texture[1].tex);
 
-   // Draw some rockets.
-   rocket(   1,   1,   0,  1, 1, 0,  30, 1.0/70.0, 3, inc, texture[2].tex, texture[7].tex);    // 3 fins with metal skin and red plastic fins
-   rocket(  -1,   0,   0,  1, 0, 1,  85, 1.0/60.0, 4, inc, texture[3].tex, texture[7].tex);    // 4 fins with glass skin and red plastic fins
-   rocket(   0, 0.5, 1.5,  0, 1, 1, 161, 1.0/80.0, 5, inc, texture[4].tex, texture[7].tex);    // 5 fins with white concrete skin and red plastic fins
-   rocket(   0,-0.5,  -1,  0, 1, 0,  35, 1.0/90.0, 6, inc, texture[5].tex, texture[7].tex);    // 6 fins with orange-ish concrete skin and red plastic fins
-   rocket( 1.1, 1.1, 1.1,  0, 0, 0,   0, 1.0/80.0, 7, inc, texture[6].tex, texture[7].tex);    // 7 fins with Rubber skin and red plastic fins
+   // Draw some wacky toy rockets.
+   
+   // 3 fins with metal skin, red plastic fins, and a flame at the base
+   rocket(   1,   1,   0,  1, 1, 0,  30, 1.0/70.0, 3, inc, texture[2].tex, 
+         texture[7].tex, texture[8].tex);    
+   
+   // 4 fins with glass skin, red plastic fins, and a flame at the base
+   rocket(  -1,   0,   0,  1, 0, 1,  85, 1.0/60.0, 4, inc, texture[3].tex, 
+         texture[7].tex, texture[8].tex);    
+   
+   // 5 fins with white concrete skin, red plastic fins, and a flame at the base
+   rocket(   0, 0.5, 1.5,  0, 1, 1, 161, 1.0/80.0, 5, inc, texture[4].tex, 
+         texture[7].tex, texture[8].tex);    
+   
+   // 6 fins with orange-ish concrete skin, red plastic fins, and a flame at the base
+   rocket(   0,-0.5,  -1,  0, 1, 0,  35, 1.0/90.0, 6, inc, texture[5].tex, 
+         texture[7].tex, texture[8].tex);    
+   
+   // 7 fins with Rubber skin (GRENADE!!!), red plastic fins, and a flame at the base
+   rocket( 1.1, 1.1, 1.1,  0, 0, 0,   0, 1.0/80.0, 7, inc, texture[6].tex, 
+         texture[7].tex, texture[8].tex);    
  
    //  Draw axes - no lighting from here on
    glDisable(GL_LIGHTING);

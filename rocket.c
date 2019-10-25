@@ -142,8 +142,9 @@ void cylNormal(double r, double th, double z)
  *    s: the scale of the solid
  *    d: The angular increment for each slice of the radially symmetric solid
  *    tex: The texture to apply
+ *    basetex: The texture for the base
  */
-void lathe(dpp profile, int size, double bx, double by, double bz, double rx, double ry, double rz, double ph, double s, double d, unsigned int tex)
+void lathe(dpp profile, int size, double bx, double by, double bz, double rx, double ry, double rz, double ph, double s, double d, unsigned int tex, unsigned int basetex)
 {
    double th;
    int i;
@@ -206,28 +207,28 @@ void lathe(dpp profile, int size, double bx, double by, double bz, double rx, do
       glEnd();
    }
 
-   // Top cap; if necessary
-   if (profile[0].r != 0.0)
-   {
-      glBegin(GL_TRIANGLE_FAN);
-      glColor3f(0,0,1);    // Top cap is always blue
-      glNormal3d(0,0,-1);   // Surface normal is straight up the z-axis
-      glVertex3d(0, profile[0].z, 0);
-      for (th = 0; th <= 360; th += d)
-         cylVertex(profile[0].r, th, profile[0].z);
-      glEnd();
-   }
+   // Assume no top cap is necessary (ie., the first point has r coordinate == 0)
 
-   // Bottom cap; if necessary
+   // Bottom cap
+   glDisable(GL_TEXTURE_2D);
+   
+   glEnable(GL_TEXTURE_2D);
+   glBindTexture(GL_TEXTURE_2D, basetex);
    if (profile[size-1].r != 0.0)
    {
       // Draw a triangle fan from the origin to the final circle.
       glBegin(GL_TRIANGLE_FAN);
-      glColor3f(1, 1, 0);    // base cap is always orange
-      glNormal3d(0,0,1);   // Surface normal is straight down the z-axis
+      
+      glColor3f(1, 1, 1);
+      glTexCoord2d(0.5,0.5);  // The first point is the center of the circle
+      glNormal3d(0,0,1);      // Surface normal is straight down the z-axis
       glVertex3d(0, profile[size-1].z, 0);
+
       for (th = 0; th <= 360; th += d)
+      {
+         glTexCoord2d(0.5+0.5*Cos(th), 0.5+0.5*Sin(th));
          cylVertex(profile[size-1].r, th, profile[size-1].z);
+      }
       glEnd();
    }
 
@@ -315,9 +316,10 @@ void draw_fins(double bx, double by, double bz, double rx, double ry, double rz,
  *    fc: how many fins the rocket gets
  *    d: The angular increment for each slice of the rocket
  *    tex: The texture to apply
- *    fintex:  The texture for the fins
+ * 	basetex: The texture for the base
  */
-void rocket(double bx, double by, double bz, double rx, double ry, double rz, double ph, double s, int fc, double d, unsigned int tex, unsigned int fintex)
+void rocket(double bx, double by, double bz, double rx, double ry, double rz, double ph, double s, int fc, double d, unsigned int tex, 
+		unsigned int fintex, unsigned int basetex)
 {
    // If this is the first time called, then populate the latitudinal progression array.  This array will be used for texture 
    // mapping so that the texture will not be distorted, even if the rocket skin control points are not evenly spaced.
@@ -349,7 +351,7 @@ void rocket(double bx, double by, double bz, double rx, double ry, double rz, do
 
    
    // Draw the main rocket cylinder
-   lathe(rocket_profile, ROCKET_POINT_COUNT, bx, by, bz, rx, ry, rz, ph, s, d, tex);
+   lathe(rocket_profile, ROCKET_POINT_COUNT, bx, by, bz, rx, ry, rz, ph, s, d, tex, basetex);
 
    // Now add some fins
    draw_fins(bx, by, bz, rx, ry, rz, ph, s, fc, fintex);

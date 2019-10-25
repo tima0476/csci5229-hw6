@@ -32,8 +32,9 @@ void cylNormal(double r, double th, double z);
  *    s: the scale of the solid
  *    d: The angular increment for each slice of the radially symmetric solid
  *    tex: The texture to apply
+ * 	  basetex: The texture for the base
  */
-void lathe(dpp profile, int size, double bx, double by, double bz, double rx, double ry, double rz, double ph, double s, double d, unsigned int tex);
+void lathe(dpp profile, int size, double bx, double by, double bz, double rx, double ry, double rz, double ph, double s, double d, unsigned int tex, unsigned int basetex);
 
 /*
  * Draw rocket fins equidistant around the rotation
@@ -58,7 +59,9 @@ void draw_fins(double bx, double by, double bz, double rx, double ry, double rz,
  *	  d: The angular increment for each slice of the rocket
  *    tex: The texture to apply
  *    fintex: The texture for the fins
+ * 	  basetex: The texture for the base
  */
-void rocket(double bx, double by, double bz, double rx, double ry, double rz, double ph, double s, int fc, double d, unsigned int tex, unsigned int fintex);
+void rocket(double bx, double by, double bz, double rx, double ry, double rz, double ph, double s, int fc, double d, unsigned int tex, 
+		unsigned int fintex, unsigned int basetex);
 
 #endif // __rocket_h__
